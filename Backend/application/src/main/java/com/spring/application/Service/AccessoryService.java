@@ -7,18 +7,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.application.Entity.Acessory;
+import com.spring.application.Entity.Product;
 import com.spring.application.Repository.AccessoryRepository;
+import com.spring.application.Repository.ProductRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AccessoryService {
 
 	@Autowired
     private AccessoryRepository accessoryRepository;
+	@Autowired
+	private ProductRepository productRepository;
 
-    // Add a new accessory
-    public Acessory addAccessory(Acessory accessory) {
+	public Acessory addAccessory(Acessory accessory) {
         return accessoryRepository.save(accessory);
     }
+
     
     
 
@@ -36,7 +42,7 @@ public class AccessoryService {
     public Acessory updateAccessory(Long id, Acessory updatedAccessory) {
         return accessoryRepository.findById(id).map(accessory -> {
             accessory.setModel(updatedAccessory.getModel());
-            accessory.setProductName(updatedAccessory.getProductName());
+            accessory.setProduct(updatedAccessory.getProduct());
             accessory.setMake(updatedAccessory.getMake());
             accessory.setCost(updatedAccessory.getCost());
             accessory.setQuantity(updatedAccessory.getQuantity());

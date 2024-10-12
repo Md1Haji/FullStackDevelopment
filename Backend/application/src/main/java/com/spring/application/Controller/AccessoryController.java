@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,20 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.application.Entity.Acessory;
 import com.spring.application.Service.AccessoryService;
+import com.spring.application.Service.ProductService;
 
 @RestController
 @RequestMapping("/api/accessories")
+@CrossOrigin(origins = "http://localhost:3000") // Allow requests from React app
 public class AccessoryController {
 
     @Autowired
     private AccessoryService accessoryService;
-
-    // Add a new accessory
-    @PostMapping("/add")
+    
+    @Autowired
+    private ProductService productService;
+    @PostMapping("/addAccessory")
     public ResponseEntity<Acessory> addAccessory(@RequestBody Acessory accessory) {
         Acessory savedAccessory = accessoryService.addAccessory(accessory);
-        return ResponseEntity.ok(savedAccessory);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedAccessory);
     }
+
 
     // Get all accessories
     @GetMapping("/all")

@@ -1,23 +1,33 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import '../App.css';
-
 const ProductForm = ({ onProductAdded }) => {
     const [model, setModel] = useState('');
-    const [productName, setProductName] = useState('');
+    const [product, setProduct] = useState(''); // Corrected variable to product
     const [make, setMake] = useState('');
     const [cost, setCost] = useState('');
     const [quantity, setQuantity] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newProduct = { model, productName, make, cost, quantity };
+
+        // Create the product object based on the form inputs
+        const newProduct = {
+            model: model,
+            product: product,  // Correctly use the `product` variable
+            make: make,
+            cost: parseFloat(cost), // Ensure cost is passed as a number
+            quantity: parseInt(quantity), // Ensure quantity is passed as a number
+        };
+
         try {
+            // Post the new product to the backend API
             const response = await axios.post('http://localhost:8080/api/products/addProducts', newProduct);
-            onProductAdded(response.data); // Update parent component with new product
-            // Reset form fields
+            onProductAdded(response.data);
+
+            // Reset the form after successful submission
             setModel('');
-            setProductName('');
+            setProduct(''); // Reset product name field
             setMake('');
             setCost('');
             setQuantity('');
@@ -28,11 +38,52 @@ const ProductForm = ({ onProductAdded }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="text" value={model} onChange={(e) => setModel(e.target.value)} placeholder="Model" required />
-            <input type="text" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder="Product Name" required />
-            <input type="text" value={make} onChange={(e) => setMake(e.target.value)} placeholder="Make" required />
-            <input type="number" value={cost} onChange={(e) => setCost(e.target.value)} placeholder="Cost" required />
-            <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="Quantity" required />
+            <h2>Add New Product</h2>
+            <div>
+                <label>Model:</label>
+                <input
+                    type="text"
+                    value={model}
+                    onChange={(e) => setModel(e.target.value)}
+                    required
+                />
+            </div>
+            <div>
+                <label>Product:</label>
+                <input
+                    type="text"
+                    value={product}
+                    onChange={(e) => setProduct(e.target.value)}
+                    required
+                />
+            </div>
+            <div>
+                <label>Make:</label>
+                <input
+                    type="text"
+                    value={make}
+                    onChange={(e) => setMake(e.target.value)}
+                    required
+                />
+            </div>
+            <div>
+                <label>Cost:</label>
+                <input
+                    type="number"
+                    value={cost}
+                    onChange={(e) => setCost(e.target.value)}
+                    required
+                />
+            </div>
+            <div>
+                <label>Quantity:</label>
+                <input
+                    type="number"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    required
+                />
+            </div>
             <button type="submit">Add Product</button>
         </form>
     );

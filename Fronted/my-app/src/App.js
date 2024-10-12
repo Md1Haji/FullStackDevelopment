@@ -1,59 +1,42 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import AccessoryForm from './components/AccessoryForm';
-import ProductForm from './components/ProductForm';
+// src/App.js
+import React, { useState } from 'react';
+import AccessoryForm from './components/AccessoryForm'; // Assuming this component exists
+import ProductForm from './components/ProductForm'; // Assuming this component exists
+import ProductList from './components/ProductList'; // Import the ProductList component
 
 const App = () => {
-    const [products, setProducts] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null); // Track selected product
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get('/api/products'); // Adjust the endpoint as necessary
-                setProducts(response.data);
-            } catch (error) {
-                console.error("Error fetching products:", error);
-            }
-        };
-        fetchProducts();
-    }, []);
-
-    const handleProductAdded = (newProduct) => {
-        setProducts([...products, newProduct]);
+    // Callback when a product is clicked
+    const handleProductClick = (product) => {
+        setSelectedProduct(product); // Store selected product
     };
 
+    // Handle accessory addition to a selected product
     const handleAccessoryAdded = (newAccessory) => {
-        if (selectedProduct) {
-            setSelectedProduct(prev => ({
-                ...prev,
-                accessories: [...(prev.accessories || []), newAccessory]
-            }));
-        }
+        // Handle the new accessory added, e.g., updating the UI or state
+        console.log('New accessory added:', newAccessory);
     };
 
     return (
         <div>
             <h1>Product Management</h1>
-            <ProductForm onProductAdded={handleProductAdded} />
-            <h2>Products</h2>
-            <ul>
-                {products.map(product => (
-                    <li key={product.id} onClick={() => setSelectedProduct(product)}>
-                        {product.productName} - {product.make}
-                    </li>
-                ))}
-            </ul>
+
+            {/* Product Form to add a new product */}
+            <ProductForm />
+
+            {/* Product List - Pass click handler to show details on selection */}
+            <ProductList onProductClick={handleProductClick} />
+
+            {/* If a product is selected, show its accessory form */}
             {selectedProduct && (
                 <div>
-                    <h2>Add Accessory to {selectedProduct.productName}</h2>
-                    <AccessoryForm productId={selectedProduct.id} onAccessoryAdded={handleAccessoryAdded} />
-                    <h3>Accessories for {selectedProduct.productName}</h3>
-                    <ul>
-                        {(selectedProduct.accessories || []).map(accessory => (
-                            <li key={accessory.id}>{accessory.productName}</li>
-                        ))}
-                    </ul>
+                    <h2>Add Accessories to Product ID: {selectedProduct.id}</h2>
+                    {/* Pass the selected product ID to AccessoryForm */}
+                    <AccessoryForm
+                        productId={selectedProduct.id}
+                        onAccessoryAdded={handleAccessoryAdded}
+                    />
                 </div>
             )}
         </div>

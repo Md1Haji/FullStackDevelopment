@@ -1,33 +1,37 @@
 package com.spring.application.Entity;
 
-import java.math.BigDecimal;
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
-//import Entity.Acessory;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-
 
 @Entity
+@Table(name = "products")
 public class Product {
 
-	 @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	    private String model;
-	    private String productName;
-	    private String make;
-	    private BigDecimal cost;
-	    private int quantity;
+    @Column(name = "model", nullable = false)
+    private String model;
 
-    // Getters and Setters
+    @Column(name = "product", nullable = false)
+    private String product;
+
+    @Column(name = "make", nullable = false)
+    private String make;
+
+    @Column(name = "cost", nullable = false)
+    private Double cost;
+
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore  // Prevents accessories from being serialized
+    private List<Acessory> accessories;
+
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -44,12 +48,12 @@ public class Product {
         this.model = model;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getProduct() {
+        return product;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProduct(String product) {
+        this.product = product;
     }
 
     public String getMake() {
@@ -60,19 +64,38 @@ public class Product {
         this.make = make;
     }
 
-    public BigDecimal getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(BigDecimal cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public List<Acessory> getAccessories() {
+        return accessories;
+    }
+
+    public void setAccessories(List<Acessory> accessories) {
+        this.accessories = accessories;
+    }
+    @Override
+    public String toString() {
+        return "Product{" +
+               "id=" + id +
+               ", model='" + model + '\'' +
+               ", product='" + product + '\'' +
+               ", make='" + make + '\'' +
+               ", cost=" + cost +
+               ", quantity=" + quantity +
+               '}';
     }
 }

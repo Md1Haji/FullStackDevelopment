@@ -9,9 +9,5 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccessoryRepository extends JpaRepository<Acessory, Long>{
-//	@Query("SELECT a FROM Accessory a JOIN FETCH a.product WHERE a.id = :id")
-//    Optional<Acessory> findAccessoryByIdWithProduct(@Param("id") Long id);
-
-
+public interface AccessoryRepository extends JpaRepository<Acessory, Long> {
 }

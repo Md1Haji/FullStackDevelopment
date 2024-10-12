@@ -1,89 +1,100 @@
 package com.spring.application.Entity;
-import java.math.BigDecimal;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "accessories")
 public class Acessory {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "model", nullable = false)
     private String model;
-    private String productName;
+
+    @Column(name = "product", nullable = false)
+    private String product;
+
+    @Column(name = "make", nullable = false)
     private String make;
-    private BigDecimal cost;
-    private int quantity;
+
+    @Column(name = "cost", nullable = false)
+    private Double cost;
+
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    private Product parentProduct;
 
+	public Long getId() {
+		return id;
+	}
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getModel() {
+		return model;
+	}
 
-    public String getModel() {
-        return model;
-    }
+	public void setModel(String model) {
+		this.model = model;
+	}
 
-    public void setModel(String model) {
-        this.model = model;
-    }
+	public String getProduct() {
+		return product;
+	}
 
-    public String getProductName() {
-        return productName;
-    }
+	public void setProduct(String product) {
+		this.product = product;
+	}
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
+	public String getMake() {
+		return make;
+	}
 
-    public String getMake() {
-        return make;
-    }
+	public void setMake(String make) {
+		this.make = make;
+	}
 
-    public void setMake(String make) {
-        this.make = make;
-    }
+	public Double getCost() {
+		return cost;
+	}
 
-    public BigDecimal getCost() {
-        return cost;
-    }
+	public void setCost(Double cost) {
+		this.cost = cost;
+	}
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
+	public Integer getQuantity() {
+		return quantity;
+	}
 
-    public int getQuantity() {
-        return quantity;
-    }
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+	public Long getProductId() {
+		return productId;
+	}
 
-    public Product getProduct() {
-        return product;
-    }
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+	public Product getParentProduct() {
+		return parentProduct;
+	}
+
+	public void setParentProduct(Product parentProduct) {
+		this.parentProduct = parentProduct;
+	}
+    
 }

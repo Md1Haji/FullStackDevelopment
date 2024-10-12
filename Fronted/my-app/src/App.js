@@ -1,41 +1,77 @@
-// src/App.js
-import React, { useState } from 'react';
-import AccessoryForm from './components/AccessoryForm'; // Assuming this component exists
-import ProductForm from './components/ProductForm'; // Assuming this component exists
-import ProductList from './components/ProductList'; // Import the ProductList component
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import ProductForm from './components/ProductForm';
+import ProductList from './components/ProductList';
+import ProductEditForm from './components/ProductEditForm';
+import AccessoryForm from './components/AccessoryForm';
+import AccessoriesPage from './components/AccessoriesPage';
 
 const App = () => {
-    const [selectedProduct, setSelectedProduct] = useState(null); // Track selected product
+    return (
+        <Router>
+            <div>
+                <nav>
+                    <ul>
+                        <li><Link to="/">Products</Link></li>
+                        <li><Link to="/accessories">Accessories</Link></li>
+                    </ul>
+                </nav>
 
-    // Callback when a product is clicked
+                <Routes>
+                    <Route path="/" element={<ProductsPage />} />
+                    <Route path="/accessories" element={<AccessoriesPage />} />
+                </Routes>
+            </div>
+        </Router>
+    );
+};
+
+const ProductsPage = () => {
+    const [selectedProduct, setSelectedProduct] = React.useState(null);
+    const [isEditingProduct, setIsEditingProduct] = React.useState(false);
+
     const handleProductClick = (product) => {
-        setSelectedProduct(product); // Store selected product
+        setSelectedProduct(product);
+        setIsEditingProduct(false);
     };
 
-    // Handle accessory addition to a selected product
-    const handleAccessoryAdded = (newAccessory) => {
-        // Handle the new accessory added, e.g., updating the UI or state
-        console.log('New accessory added:', newAccessory);
+    const handleProductEditClick = (product) => {
+        setSelectedProduct(product);
+        setIsEditingProduct(true);
+    };
+
+    const handleProductUpdated = (updatedProduct) => {
+        console.log('Product updated:', updatedProduct);
+        setIsEditingProduct(false);
+        setSelectedProduct(updatedProduct);
     };
 
     return (
         <div>
             <h1>Product Management</h1>
-
-            {/* Product Form to add a new product */}
             <ProductForm />
+            <ProductList
+                onProductClick={handleProductClick}
+                onProductEditClick={handleProductEditClick} // Pass this prop here
+            />
 
-            {/* Product List - Pass click handler to show details on selection */}
-            <ProductList onProductClick={handleProductClick} />
+            {isEditingProduct && selectedProduct && (
+                <div>
+                    <h2>Edit Product ID: {selectedProduct.id}</h2>
+                    <ProductEditForm
+                        product={selectedProduct}
+                        onProductUpdated={handleProductUpdated}
+                        onClose={() => setIsEditingProduct(false)}
+                    />
+                </div>
+            )}
 
-            {/* If a product is selected, show its accessory form */}
-            {selectedProduct && (
+            {selectedProduct && !isEditingProduct && (
                 <div>
                     <h2>Add Accessories to Product ID: {selectedProduct.id}</h2>
-                    {/* Pass the selected product ID to AccessoryForm */}
                     <AccessoryForm
                         productId={selectedProduct.id}
-                        onAccessoryAdded={handleAccessoryAdded}
+                        onAccessoryAdded={(newAccessory) => console.log('New accessory added:', newAccessory)}
                     />
                 </div>
             )}

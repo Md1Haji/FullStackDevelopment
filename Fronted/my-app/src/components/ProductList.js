@@ -1,8 +1,7 @@
-// src/components/ProductList.js
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const ProductList = ({ onProductClick }) => {
+const ProductList = ({ onProductClick, onProductEditClick }) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -22,11 +21,6 @@ const ProductList = ({ onProductClick }) => {
         fetchProducts();
     }, []);
 
-    // Handler for opening the accessory form for a specific product
-    const handleProductClick = (product) => {
-        onProductClick(product); // Pass the selected product to the parent
-    };
-
     return (
         <div>
             <h2>Products</h2>
@@ -38,7 +32,7 @@ const ProductList = ({ onProductClick }) => {
                         <th>Make</th>
                         <th>Model</th>
                         <th>Cost</th>
-                        <th>Action</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,8 +44,13 @@ const ProductList = ({ onProductClick }) => {
                             <td>{product.model}</td>
                             <td>{product.cost}</td>
                             <td>
-                                {/* Click to open the accessory form */}
-                                <button onClick={() => handleProductClick(product)}>Add Accessories</button>
+                                <button 
+                                    style={{ marginRight: '10px' }} 
+                                    onClick={() => onProductClick(product)}
+                                >
+                                    Add Accessories
+                                </button>
+                                <button onClick={() => onProductEditClick(product)}>Edit</button> {/* Corrected here */}
                             </td>
                         </tr>
                     ))}
